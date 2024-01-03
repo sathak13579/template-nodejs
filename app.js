@@ -209,7 +209,7 @@ server.listen(port, () => {
 async function fetchJiraData(user) {
   try {
     const jiraUrl =
-      'https://digidesktop.atlassian.net/rest/api/3/search?jql=(status WAS "In Progress" AFTER -12h) AND assignee  = currentUser() OR status changed AFTER -12h AND status not in ("PROD QA", Issues, Done) AND assignee = currentUser()';
+      'https://digidesktop.atlassian.net/rest/api/3/search?jql=(status WAS "In Progress" AFTER -240h) AND assignee  = currentUser() OR status changed AFTER -12h AND status not in ("PROD QA", Issues, Done) AND assignee = currentUser()';
     const authString = base64.fromByteArray(
       Buffer.from(`${user.email}:${user.jiraApiToken}`)
     );
@@ -237,7 +237,7 @@ async function fetchJiraData(user) {
 
     return issues.map(
       (issue) =>
-        `worked on <https://digidesktop.atlassian.net/browse/${issue.key}|${issue.key}> - ${issue.fields.summary} - *${issue.fields.status.name}*`
+        `issues worked on in the past ten days: \nworked on <https://digidesktop.atlassian.net/browse/${issue.key}|${issue.key}> - ${issue.fields.summary} - *${issue.fields.status.name}*`
     );
   } catch (error) {
     console.error(`Failed to get data for user ${user.name}:`, error);
